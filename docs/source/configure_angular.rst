@@ -8,7 +8,7 @@ rest of the application.  We need to add the Stormpath modules as
 dependencies of our application, and we need to configure some of the
 magic that will happen with the `UI Router`_ module.
 
-Add Stormpath to the Agnular Application
+Add Stormpath to the Angular Application
 ==========================================
 
 We need to manually declare the Stormpath Angular SDK as a module
@@ -26,7 +26,7 @@ to look like so::
       'stormpath.templates'
     ])
 
-Configure the UI Router integration
+Configure the UI Router Integration
 ===================================
 
 You're going to get the best bang for your buck if you use the
@@ -50,7 +50,7 @@ This tells the integration to do the following:
 * Redirect users to the ``login`` view if they try to access a restricted view. After login, they are sent back to the view that they originally requested.
 * Send users to the ``main`` view after login, if they have visited the login page directly (they did not try to access a restricted view first).
 
-With that we can move to the next section and create a Registration Form, so that
+With that, we can move to the next section and create a Registration Form, so that
 users can sign up for our service.
 
 .. _UI Router: https://github.com/angular-ui/ui-router
