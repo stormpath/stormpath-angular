@@ -204,9 +204,6 @@ angular.module('stormpath',['stormpath.CONFIG','stormpath.auth','stormpath.userS
          */
         $rootScope.$broadcast(STORMPATH_CONFIG.STATE_CHANGE_UNAUTHORIZED,toState,toParams);
       }
-
-      StormpathService.prototype.
-
       StormpathService.prototype.stateChangeInterceptor = function stateChangeInterceptor() {
         $rootScope.$on('$stateChangeStart', function(e,toState,toParams){
           var sp = toState.sp || {}; // Grab the sp config for this state
