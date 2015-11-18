@@ -1,6 +1,17 @@
+# 0.8.0
+
+* Added support for social login with Google and Facebook (requires use of
+  [Express-Stormpath][] as your backend)
+
+# 0.7.2
+
+**Released on October 26th, 2015**
+
+* Updating `grunt-contrib` dependencies
+
 # 0.7.1
 
-**Not Yet Released**
+**Released on October 8th, 2015**
 
 Fixed the [ifUserInGroup][] and [ifUserNotInGroup][] directives to expect the
 new data format (expanded `account.groups`) from the `/me` route
