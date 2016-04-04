@@ -53,6 +53,13 @@ will walk you through the creation of a full-stack application.*
 
   Or install with bower: `$ bower install --save stormpath-sdk-angularjs`
 
+
+  Or to install by npm `$ npm install --save stormpath-sdk-angularjs`
+   * with ES6 - import 'stormpath-sdk-angularjs';
+   * with commonjs - require("stormpath-sdk-angularjs");
+
+
+
 4. **Add the Module to Your App's Dependencies**
 
   Add the `stormpath` module and templates to your app's dependencies in *app.js*:
