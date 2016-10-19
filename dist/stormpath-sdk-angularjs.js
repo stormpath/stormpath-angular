@@ -2,7 +2,7 @@
  * stormpath-sdk-angularjs
  * Copyright Stormpath, Inc. 2016
  * 
- * @version v1.1.0-dev-2016-08-17
+ * @version v1.1.0-dev-2016-10-19
  * @link https://github.com/stormpath/stormpath-sdk-angularjs
  * @license Apache-2.0
  */
@@ -2920,7 +2920,13 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
   * Please use the `ifUserInGroup` directive instead
   */
   User.prototype.inGroup = function inGroup(groupName) {
-    return this.groups.items.filter(function(group){
+    var groupItems = this.groups.items;
+    // Workaround for Java SDK not expanding groups like other SDKs
+    // https://github.com/stormpath/stormpath-sdk-angularjs/issues/178
+    if (groupItems === undefined) {
+      groupItems = this.groups;
+    }
+    return groupItems.filter(function(group){
       return group.name === groupName;
     }).length >0;
   };
@@ -2929,7 +2935,13 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
   * Please use the `ifUserInGroup` directive instead
   */
   User.prototype.matchesGroupExpression = function matchesGroupExpression(regex) {
-    return this.groups.items.filter(function(group){
+    var groupItems = this.groups.items;
+    // Workaround for Java SDK not expanding groups like other SDKs
+    // https://github.com/stormpath/stormpath-sdk-angularjs/issues/178
+    if (groupItems === undefined) {
+      groupItems = this.groups;
+    }
+    return groupItems.filter(function(group){
       return regex.test(group.name);
     }).length >0;
   };
@@ -3183,14 +3195,9 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
        * verified and can be used for login.  If rejected the token is expired
        * or has already been used.
        *
-       * @param  {Object} data Data object
+       * @param  {String} sptoken
        *
-       * An object literal for passing the email verification token.
-       * Must follow this format:
-       * ```
-       * {
-       *   sptoken: '<token from email>'
-       * }```
+       * The value of the `sptoken` that was sent by email to the user
        *
        * @description
        *

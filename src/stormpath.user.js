@@ -46,7 +46,13 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
   * Please use the `ifUserInGroup` directive instead
   */
   User.prototype.inGroup = function inGroup(groupName) {
-    return this.groups.items.filter(function(group){
+    var groupItems = this.groups.items;
+    // Workaround for Java SDK not expanding groups like other SDKs
+    // https://github.com/stormpath/stormpath-sdk-angularjs/issues/178
+    if (groupItems === undefined) {
+      groupItems = this.groups;
+    }
+    return groupItems.filter(function(group){
       return group.name === groupName;
     }).length >0;
   };
@@ -55,7 +61,13 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
   * Please use the `ifUserInGroup` directive instead
   */
   User.prototype.matchesGroupExpression = function matchesGroupExpression(regex) {
-    return this.groups.items.filter(function(group){
+    var groupItems = this.groups.items;
+    // Workaround for Java SDK not expanding groups like other SDKs
+    // https://github.com/stormpath/stormpath-sdk-angularjs/issues/178
+    if (groupItems === undefined) {
+      groupItems = this.groups;
+    }
+    return groupItems.filter(function(group){
       return regex.test(group.name);
     }).length >0;
   };
