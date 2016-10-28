@@ -2,7 +2,7 @@
  * stormpath-sdk-angularjs
  * Copyright Stormpath, Inc. 2016
  * 
- * @version v1.1.0-dev-2016-08-17
+ * @version v1.1.0-dev-2016-10-24
  * @link https://github.com/stormpath/stormpath-sdk-angularjs
  * @license Apache-2.0
  */
@@ -3183,14 +3183,9 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
        * verified and can be used for login.  If rejected the token is expired
        * or has already been used.
        *
-       * @param  {Object} data Data object
+       * @param  {String} sptoken
        *
-       * An object literal for passing the email verification token.
-       * Must follow this format:
-       * ```
-       * {
-       *   sptoken: '<token from email>'
-       * }```
+       * The value of the `sptoken` that was sent by email to the user
        *
        * @description
        *
