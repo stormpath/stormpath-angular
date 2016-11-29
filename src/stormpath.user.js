@@ -21,7 +21,7 @@
  * Currently, this provider does not have any configuration methods.
  */
 
-angular.module('stormpath.userService',['stormpath.CONFIG'])
+angular.module('stormpath.userService',['stormpath.CONFIG', 'stormpath.utils'])
 .provider('$user', [function $userProvider(){
 
   /**
@@ -163,11 +163,11 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
          * </pre>
          */
 
-        return $http($spFormEncoder.formPost({
+        return $http({
           url: STORMPATH_CONFIG.getUrl('REGISTER_URI'),
           method: 'POST',
           data: accountData
-        }))
+        })
         .then(function(response){
           var account = response.data.account || response.data;
           registeredEvent(account);
@@ -242,7 +242,7 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
         }else{
           self.cachedUserOp = op;
 
-          $http.get(STORMPATH_CONFIG.getUrl('CURRENT_USER_URI'),{withCredentials:true}).then(function(response){
+          $http.get(STORMPATH_CONFIG.getUrl('CURRENT_USER_URI')).then(function(response){
             self.cachedUserOp = null;
             self.currentUser = new User(response.data.account || response.data);
             currentUserEvent(self.currentUser);
@@ -351,7 +351,9 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
        * The `sptoken` that was delivered to the user by email
        */
       UserService.prototype.verifyPasswordResetToken = function verifyPasswordResetToken(token){
-        return $http.get(STORMPATH_CONFIG.getUrl('CHANGE_PASSWORD_ENDPOINT')+'?sptoken='+token);
+        return $http({
+          url: STORMPATH_CONFIG.getUrl('CHANGE_PASSWORD_ENDPOINT')+'?sptoken='+token
+        });
       };
 
       /**
@@ -381,11 +383,11 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
        * ```
        */
       UserService.prototype.passwordResetRequest = function passwordResetRequest(data){
-        return $http($spFormEncoder.formPost({
+        return $http({
           method: 'POST',
           url: STORMPATH_CONFIG.getUrl('FORGOT_PASSWORD_ENDPOINT'),
           data: data
-        }))
+        })
         .catch(function(httpResponse){
           return $q.reject($spErrorTransformer.transformError(httpResponse));
         });
@@ -425,11 +427,11 @@ angular.module('stormpath.userService',['stormpath.CONFIG'])
        */
       UserService.prototype.resetPassword = function resetPassword(token,data){
         data.sptoken = token;
-        return $http($spFormEncoder.formPost({
+        return $http({
           method: 'POST',
           url:STORMPATH_CONFIG.getUrl('CHANGE_PASSWORD_ENDPOINT'),
           data: data
-        }))
+        })
         .catch(function(httpResponse){
           return $q.reject($spErrorTransformer.transformError(httpResponse));
         });

@@ -1,6 +1,62 @@
 'use strict';
 
-angular.module('stormpath')
+/**
+ * This module and factory are intentionally excluded from NG Docs.
+ *
+ * The factory is an internal utility used to check whether an URL is on the
+ * same domain on which the SPA is hosted.
+ */
+
+angular.module('stormpath.utils', ['stormpath.CONFIG'])
+.factory('$isCurrentDomain', ['$window', function($window) {
+  return function(url) {
+    var link = $window.document.createElement('a');
+    link.href = url;
+
+    return $window.location.host === link.host;
+  };
+}])
+.constant('$spHeaders', {
+  // The placeholders in the value are replaced by the `grunt dist` command.
+  'X-Stormpath-Agent': '@@PACKAGE_NAME/@@PACKAGE_VERSION' + ' angularjs/' + angular.version.full
+})
+.provider('$spErrorTransformer', [function $spErrorTransformer(){
+  /**
+   * This service is intentionally excluded from NG Docs.
+   *
+   * It is an internal utility for producing error objects from $http response
+   * errors.
+   */
+
+  this.$get = [
+    function formEncoderServiceFactory(){
+
+      function ErrorTransformerService(){
+
+      }
+
+      ErrorTransformerService.prototype.transformError = function transformError(httpResponse){
+        var errorMessage = null;
+
+        if (httpResponse.data) {
+          errorMessage = httpResponse.data.message || httpResponse.data.error;
+        }
+
+        if (!errorMessage) {
+          errorMessage = 'An error occured when communicating with the server.';
+        }
+
+        var error = new Error(errorMessage);
+
+        error.httpResponse = httpResponse;
+        error.statusCode = httpResponse.status;
+        return error;
+      };
+
+      return new ErrorTransformerService();
+    }
+  ];
+}])
 .provider('$spFormEncoder', [function $spFormEncoder(){
   /**
    * This service is intentionally excluded from NG Docs.
@@ -8,8 +64,7 @@ angular.module('stormpath')
    */
 
   this.$get = [
-    'STORMPATH_CONFIG',
-    function formEncoderServiceFactory(STORMPATH_CONFIG){
+    function formEncoderServiceFactory(){
 
       function FormEncoderService(){
         var encoder = new UrlEncodedFormParser();
@@ -18,11 +73,9 @@ angular.module('stormpath')
       }
 
       FormEncoderService.prototype.formPost = function formPost(httpRequest){
-        if(STORMPATH_CONFIG.FORM_CONTENT_TYPE==='application/x-www-form-urlencoded'){
-          var h = httpRequest.headers ? httpRequest.headers : (httpRequest.headers = {});
-          h['Content-Type'] = STORMPATH_CONFIG.FORM_CONTENT_TYPE;
-          httpRequest.data = this.encodeUrlForm(httpRequest.data);
-        }
+        var h = httpRequest.headers ? httpRequest.headers : (httpRequest.headers = {});
+        h['Content-Type'] = 'application/x-www-form-urlencoded';
+        httpRequest.data = this.encodeUrlForm(httpRequest.data);
         return httpRequest;
       };
 
@@ -117,4 +170,26 @@ angular.module('stormpath')
       return new FormEncoderService();
     }
   ];
-}]);
+}])
+/**
+* Intentionally excluded from the NG Docs.
+*
+* Shallow-transforms snake-cased keys in an object into camelCased keys
+*/
+.factory('$normalizeObjectKeys', function() {
+  return function normalizeObjectKeys(obj) {
+    var camelCasedObj = {};
+
+    Object.keys(obj).forEach(function(key) {
+      if (obj.hasOwnProperty(key)) {
+        var camelCasedKey = key.replace(/_([A-Za-z])/g, function(all, char) {
+          return char.toUpperCase();
+        });
+
+        camelCasedObj[camelCasedKey] = obj[key];
+      }
+    });
+
+    return camelCasedObj;
+  };
+});

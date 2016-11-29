@@ -216,22 +216,6 @@ angular.module('stormpath.CONFIG',[])
     /**
     * @ngdoc property
     *
-    * @name FORM_CONTENT_TYPE
-    *
-    * @propertyOf stormpath.STORMPATH_CONFIG:STORMPATH_CONFIG
-    *
-    * @description
-    *
-    * Default: `'application/x-www-form-urlencoded'`
-    *
-    * The content type that is used for form posts.
-    */
-    FORM_CONTENT_TYPE: 'application/x-www-form-urlencoded',
-
-
-    /**
-    * @ngdoc property
-    *
     * @name GET_USER_EVENT
     *
     * @propertyOf stormpath.STORMPATH_CONFIG:STORMPATH_CONFIG
@@ -319,6 +303,8 @@ angular.module('stormpath.CONFIG',[])
     */
     SESSION_END_EVENT: '$sessionEnd',
 
+    SESSION_END_ERROR_EVENT: '$sessionEndError',
+
 
     /**
     * @ngdoc property
@@ -391,6 +377,68 @@ angular.module('stormpath.CONFIG',[])
     */
     ROUTE_CHANGE_UNAUTHORIZED: '$routeChangeUnauthorized',
 
+    /**
+    * @ngdoc property
+    *
+    * @name OAUTH_REQUEST_ERROR
+    *
+    * @propertyOf stormpath.STORMPATH_CONFIG:STORMPATH_CONFIG
+    *
+    * @description
+    *
+    * Default: `$oAuthRequestError`
+    *
+    * The name of the event that is fired when the user attempts OAuth-based
+    * authentication, and fails due to an OAuth issue.
+    */
+    OAUTH_REQUEST_ERROR: '$oAuthRequestError',
+
+    /**
+    * @ngdoc property
+    *
+    * @name OAUTH_AUTHENTICATION_ENDPOINT
+    *
+    * @propertyOf stormpath.STORMPATH_CONFIG:STORMPATH_CONFIG
+    *
+    * @description
+    *
+    * Default: `/oauth/token`
+    *
+    * The endpoint that is used to authenticate and refresh using OAuth tokens.
+    * This endpoint MUST support password and refresh_token grant authentication
+    * flows.
+    */
+    OAUTH_AUTHENTICATION_ENDPOINT: '/oauth/token',
+
+    /**
+    * @ngdoc property
+    * @name OAUTH_REVOKE_ENDPOINT
+    *
+    * @propertyOf stormpath.STORMPATH_CONFIG:STORMPATH_CONFIG
+    *
+    * @description
+    *
+    * Default: `/oauth/revoke`
+    *
+    * The endpoint that is used to revoke OAuth tokens.
+    */
+    OAUTH_REVOKE_ENDPOINT: '/oauth/revoke',
+
+    /**
+    * @ngdoc property
+    * @name OAUTH_REVOKE_ENDPOINT
+    *
+    * @propertyOf stormpath.STORMPATH_CONFIG:STORMPATH_CONFIG
+    *
+    * @description
+    *
+    * The name under which tokens are stored in the token storage mechanism.
+    * Might not be relevant if the underlying storage mechanism is not key-value
+    * based.
+    *
+    * See {@link stormpath.tokenStore.TokenStoreManager TokenStoreManager} for more detail.
+    */
+    OAUTH_TOKEN_STORAGE_NAME: 'stormpath:token',
 
     /**
     * @ngdoc property
@@ -426,6 +474,22 @@ angular.module('stormpath.CONFIG',[])
     * is resolved with an account that was successfully created
     */
     REGISTERED_EVENT_NAME: '$registered',
+
+    /**
+    * @ngdoc property
+    *
+    * @name OAUTH_DEFAULT_TOKEN_STORE_TYPE
+    *
+    * @propertyOf stormpath.STORMPATH_CONFIG:STORMPATH_CONFIG
+    *
+    * @description
+    *
+    * Default: `localStorage`
+    *
+    * The default type of local storage used by
+    * {@link stormpath.oauth.StormpathOAuthTokenProvider}.
+    */
+    OAUTH_DEFAULT_TOKEN_STORE_TYPE: 'localStorage'
 
   };
   c.getUrl = function(key) {
