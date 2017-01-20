@@ -250,6 +250,7 @@ angular.module('stormpath', [
     function stormpathServiceFactory($user, $injector, STORMPATH_CONFIG, $rootScope, $location) {
       var $state;
       var $route;
+      var $transitions;
 
       function StormpathService(){
         var encoder = new UrlEncodedFormParser();
@@ -257,6 +258,10 @@ angular.module('stormpath', [
 
         if ($injector.has('$state')) {
           $state = $injector.get('$state');
+        }
+       
+        if ($injector.has('$transitions')) {
+          $transitions = $injector.get('$transitions');
         }
 
         if ($injector.has('$route')) {
