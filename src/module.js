@@ -367,8 +367,7 @@ angular.module('stormpath', [
             .then(
               () => true,
               () => {
-                $rootScope.$broadcast(STORMPATH_CONFIG.STATE_CHANGE_UNAUTHENTICATED,trans.$to(),trans.params());
-                return $state.target(config.loginState)
+                stateChangeUnauthenticatedEvent(trans.$to(),trans.params());
               }
             )
         });
