@@ -348,6 +348,26 @@ angular.module('stormpath', [
         $rootScope.$broadcast(STORMPATH_CONFIG.STATE_CHANGE_UNAUTHORIZED,toState,toParams);
       }
       StormpathService.prototype.stateChangeInterceptor = function stateChangeInterceptor(config) {
+       
+       var match = {
+          to: state => {
+            var sp = state.sp || {};
+            var authorities = (state.data && state.data.authorities) ? state.data.authorities : undefined;
+            return sp.authenticate || sp.authorize || (authorities && authorities.length)
+          }
+        }
+
+        $transitions.onStart(match, function(trans) {
+          return $user.get()
+            .then(
+              () => true,
+              () => {
+                $rootScope.$broadcast(STORMPATH_CONFIG.STATE_CHANGE_UNAUTHENTICATED,trans.$to(),trans.params());
+                return $state.target(config.loginState)
+              }
+            )
+        });
+       
         $rootScope.$on('$stateChangeStart', function(e,toState,toParams){
           var sp = toState.sp || {}; // Grab the sp config for this state
           var authorities = (toState.data && toState.data.authorities) ? toState.data.authorities : undefined;
