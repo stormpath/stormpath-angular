@@ -3,6 +3,7 @@
   "version": "2.0.1",
   "description": "",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +15,8 @@
     "url": "https://github.com/stormpath/stormpath-sdk-angularjs.git"
   },
   "devDependencies": {
+    "@types/angular": "^1.5.20",
+    "@types/angular-ui-router": "^1.1.34",
     "grunt-contrib-concat": "^0.5.1",
     "grunt": "^0.4.5",
     "load-grunt-tasks": "^3.4.0",
