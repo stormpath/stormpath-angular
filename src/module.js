@@ -250,6 +250,7 @@ angular.module('stormpath', [
     function stormpathServiceFactory($user, $injector, STORMPATH_CONFIG, $rootScope, $location) {
       var $state;
       var $route;
+      var $transitions;
 
       function StormpathService(){
         var encoder = new UrlEncodedFormParser();
@@ -257,6 +258,10 @@ angular.module('stormpath', [
 
         if ($injector.has('$state')) {
           $state = $injector.get('$state');
+        }
+       
+        if ($injector.has('$transitions')) {
+          $transitions = $injector.get('$transitions');
         }
 
         if ($injector.has('$route')) {
@@ -348,6 +353,25 @@ angular.module('stormpath', [
         $rootScope.$broadcast(STORMPATH_CONFIG.STATE_CHANGE_UNAUTHORIZED,toState,toParams);
       }
       StormpathService.prototype.stateChangeInterceptor = function stateChangeInterceptor(config) {
+       
+       var match = {
+          to: state => {
+            var sp = state.sp || {};
+            var authorities = (state.data && state.data.authorities) ? state.data.authorities : undefined;
+            return sp.authenticate || sp.authorize || (authorities && authorities.length)
+          }
+        }
+
+        $transitions.onStart(match, function(trans) {
+          return $user.get()
+            .then(
+              () => true,
+              () => {
+                stateChangeUnauthenticatedEvent(trans.$to(),trans.params());
+              }
+            )
+        });
+       
         $rootScope.$on('$stateChangeStart', function(e,toState,toParams){
           var sp = toState.sp || {}; // Grab the sp config for this state
           var authorities = (toState.data && toState.data.authorities) ? toState.data.authorities : undefined;
